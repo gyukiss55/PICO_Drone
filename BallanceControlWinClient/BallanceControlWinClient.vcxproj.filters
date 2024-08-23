@@ -39,6 +39,12 @@
     <ClInclude Include="WinHttpClient.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="DroneSensorData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DroneControlData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallanceControlWinClient.cpp">
@@ -57,6 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WinHttpClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DroneControlData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DroneSensorData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -144,6 +144,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BallanceControlWinClient.h" />
+    <ClInclude Include="DroneControlData.h" />
+    <ClInclude Include="DroneSensorData.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GAMDraw.h" />
     <ClInclude Include="GearAccMag.h" />
@@ -156,6 +158,8 @@
     <ClCompile Include="BallanceControlWinClient.cpp" />
     <ClCompile Include="CalcOrientation.cpp" />
     <ClCompile Include="CalcOrientation.h" />
+    <ClCompile Include="DroneControlData.cpp" />
+    <ClCompile Include="DroneSensorData.cpp" />
     <ClCompile Include="GAMDraw.cpp" />
     <ClCompile Include="SocketClient.cpp" />
     <ClCompile Include="WinHttpClient.cpp" />
