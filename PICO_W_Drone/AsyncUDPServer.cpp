@@ -5,6 +5,7 @@
 #include <AsyncUDP.h>
 
 #include "AsyncUDPServer.h"
+#include "DroneSensorData.h"
 
 #ifndef STASSID
 #define STASSID "RTAX999"
@@ -47,7 +48,10 @@ void setupAsyncUDPServer()
             Serial.write(packet.data(), packet.length());
             Serial.println();
             //reply to the client
-            packet.printf("Got %u bytes of data", packet.length());
+            CloneDroneSensorDataVector();
+            packet.printf("Got %u bytes of data.", packet.length());
+            packet.printf("Send DroneSensorDataVector %u/%u bytes of data:", sizeof (droneSensorDataVector2), sizeof(droneSensorDataVector2[0]));
+            packet.write((uint8_t *) &droneSensorDataVector2[0], sizeof(droneSensorDataVector2));
             });
     }
 }

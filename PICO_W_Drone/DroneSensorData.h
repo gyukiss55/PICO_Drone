@@ -1,7 +1,5 @@
 // DroneSensorData.h
 
-#include <Arduino.h>
-
 
 class DroneSensorData {
 public:
@@ -17,6 +15,7 @@ public:
 		BatteryMPUValid = 64
 	};
 private:
+	char		structMark[4];
 	uint32_t	structSize;
 
 	uint32_t	timeStamp;
@@ -43,7 +42,7 @@ private:
 public:
 	DroneSensorData()
 		: 
-		structSize (sizeof(DroneSensorData)), timeStamp (0),
+		structMark ("DSD"), structSize(sizeof(DroneSensorData)), timeStamp(0),
 		accelX(0), accelY(0), accelZ(0),
 		gyroX(0), gyroY(0), gyroZ(0),
 		magX(0), magY(0), magZ(0),
@@ -53,7 +52,7 @@ public:
 	}
 	DroneSensorData(uint32_t ts)
 		: 
-		structSize (sizeof(DroneSensorData)), timeStamp (ts),
+		structMark("DSD"), structSize (sizeof(DroneSensorData)), timeStamp (ts),
 		accelX(0), accelY(0), accelZ(0),
 		gyroX(0), gyroY(0), gyroZ(0),
 		magX(0), magY(0), magZ(0),
