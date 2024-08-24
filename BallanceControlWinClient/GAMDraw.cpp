@@ -86,6 +86,7 @@ void ReadSocketClient (HWND hWnd)
 		sd.GetAccel(item.acc[0], item.acc[1], item.acc[2]);
 		sd.GetGyro(item.gear[0], item.gear[1], item.gear[2]);
 		sd.GetMag(item.mag[0], item.mag[1], item.mag[2]);
+		sd.GetHorizontalDir(item.horizontalDir);
 		sd.GetElevationUS(item.elevationUS);
 		sd.GetElevationBaro(item.elevationBaro);
 		sd.GetBatteryMotor(item.batteryMotor);
@@ -169,9 +170,9 @@ void DrawCurves (HWND hWnd, HDC hDC, UINT32 indexIn, UINT32 num)
 	gam_tmp1 = arrayGAM[index1];
 	CalcOrientation(gam_tmp1);
 	for (UINT32 i = 1; i < num; i++) {
-		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[0], arrayGAM[index2].acc[0],   COLOR_RED,   h, h, -10., 10.);
-		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[1], arrayGAM[index2].acc[1],   COLOR_GREEN, h, h, -10., 10.);
-		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[2], arrayGAM[index2].acc[2],   COLOR_BLUE,  h, h, -10., 10.);
+		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[0], arrayGAM[index2].acc[0],   COLOR_RED,   h, h, -1., 1.);
+		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[1], arrayGAM[index2].acc[1],   COLOR_GREEN, h, h, -1., 1.);
+		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].acc[2], arrayGAM[index2].acc[2],   COLOR_BLUE,  h, h, -1., 1.);
 //		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].speed[0], arrayGAM[index2].speed[0], COLOR_BLACK, 0, h, -10., 10.);
 
 		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].gear[0], arrayGAM[index2].gear[0], COLOR_RED,   0, h, -500., 500.);
@@ -207,10 +208,10 @@ void DrawCurves (HWND hWnd, HDC hDC, UINT32 indexIn, UINT32 num)
 	text = L"Mag: " + std::to_wstring (arrayGAM[index1 + 1].mag[0]) + L", " + std::to_wstring (arrayGAM[index1 + 1].mag[1]) + L", " + std::to_wstring (arrayGAM[index1 + 1].mag[2]) + L"   ";
 	TextOut (hDC, x1, y1, text.c_str (), text.size ());
 	y1 += dy;
-	text = L"Yaw: " + std::to_wstring (arrayGAM[index1 + 1].north) + L", Roll: " + std::to_wstring (arrayGAM[index1 + 1].roll) + L", Pitch: " + std::to_wstring (arrayGAM[index1 + 1].pitch) + L"   ";
+	text = L"Yaw: " + std::to_wstring (gam_tmp2.north) + L", Roll: " + std::to_wstring (gam_tmp2.roll) + L", Pitch: " + std::to_wstring (gam_tmp2.pitch) + L"   ";
 	TextOut (hDC, x1, y1, text.c_str (), text.size ());
 	y1 += dy;
-	text = L"Yaw: " + std::to_wstring (gam_tmp2.north) + L", Roll: " + std::to_wstring (gam_tmp2.roll) + L", Pitch: " + std::to_wstring (gam_tmp2.pitch) + L"   ";
+	text = L"ElevUS: " + std::to_wstring (arrayGAM[index1 + 1].elevationUS) + L", ElevBM: " + std::to_wstring (arrayGAM[index1 + 1].elevationBaro) + L", BatteryMotor: " + std::to_wstring (arrayGAM[index1 + 1].batteryMotor) + L", BatteryMPU: " + std::to_wstring(arrayGAM[index1 + 1].batteryMPU) + L"   ";
 	TextOut (hDC, x1, y1, text.c_str (), text.size ());
 	y1 += dy;
 	//text = L"Quat: " + std::to_wstring (arrayGAM[index1 + 1].quat[0]) + L", " + std::to_wstring (arrayGAM[index1 + 1].quat[1]) + L", " + std::to_wstring (arrayGAM[index1 + 1].quat[2]) + L", " + std::to_wstring (arrayGAM[index1 + 1].quat[3]) + L"   ";
@@ -230,7 +231,7 @@ void GAMDraw (HWND hWnd, HDC hdc)
 
 	UINT32 index1 = SIZEOFGAMARRAY - 1;
 	if (indexGAM > 1)
-		DrawCurves (hWnd, hdc, indexGlobal, 2);
+		DrawCurves (hWnd, hdc, indexGlobal, numGAM);
 
 	indexGlobal++;
 }

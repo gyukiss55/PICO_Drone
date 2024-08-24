@@ -11,6 +11,7 @@ struct GearAccMagItem {
 	float			gear[3];
 	float			acc[3];
 	float			mag[3];
+	float			horizontalDir;
 
 	float			elevationUS;
 	float			elevationBaro;

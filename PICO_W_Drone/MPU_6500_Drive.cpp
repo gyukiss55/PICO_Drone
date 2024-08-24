@@ -159,6 +159,7 @@ bool Measure_MPU_6500_Drive()
     }
     if (result == 0) {
         droneSensorDataCurrent.SetMag(mySensor.magX(), mySensor.magY(), mySensor.magZ());
+        droneSensorDataCurrent.SetHorizontalDir(mySensor.magHorizDirection());
         mX = mySensor.magX();
         mY = mySensor.magY();
         mZ = mySensor.magZ();

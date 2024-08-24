@@ -9,10 +9,11 @@ public:
 		AccelValid = 1,
 		GyroValid = 2,
 		MagValid = 4,
-		ElevBaroValid = 8,
-		ElevUSValid = 16,
-		BatteryMotorValid = 32,
-		BatteryMPUValid = 64
+		HorizontalDirValid = 8,
+		ElevBaroValid = 16,
+		ElevUSValid = 32,
+		BatteryMotorValid = 64,
+		BatteryMPUValid = 128
 	};
 private:
 	char		structMark[4];
@@ -31,6 +32,7 @@ private:
 	float		magX;
 	float		magY;
 	float		magZ;
+	float		horizontalDir;
 
 	float		elevationBaro;
 	float		elevationUS;
@@ -45,7 +47,7 @@ public:
 		structMark ("DSD"), structSize(sizeof(DroneSensorData)), timeStamp(0),
 		accelX(0), accelY(0), accelZ(0),
 		gyroX(0), gyroY(0), gyroZ(0),
-		magX(0), magY(0), magZ(0),
+		magX(0), magY(0), magZ(0), horizontalDir (0),
 		elevationBaro(0), elevationUS(0), batteryMotor(0), batteryMPU(0),
 		status (NotValid)
 	{
@@ -55,7 +57,7 @@ public:
 		structMark("DSD"), structSize (sizeof(DroneSensorData)), timeStamp (ts),
 		accelX(0), accelY(0), accelZ(0),
 		gyroX(0), gyroY(0), gyroZ(0),
-		magX(0), magY(0), magZ(0),
+		magX(0), magY(0), magZ(0), horizontalDir(0),
 		elevationBaro(0), elevationUS(0), batteryMotor(0), batteryMPU(0),
 		status (NotValid)
 	{
@@ -72,6 +74,7 @@ public:
 	void SetMag  (float x, float y, float z) { 
 		magX = x; magY = y; magZ = z; status |= MagValid;
 	}
+	void SetHorizontalDir(float v) { horizontalDir = v; status |= HorizontalDirValid; }
 	void SetElevationBaro(float v) { elevationBaro = v; status |= ElevBaroValid; }
 	void SetElevationUS(float v) { elevationUS = v; status |= ElevUSValid; }
 	void SetBatteryMotor(float v) { batteryMotor = v; status |= BatteryMotorValid; }
@@ -82,6 +85,7 @@ public:
 	bool GetAccel(float& x, float& y, float& z) const { x = accelX; y = accelY; z = accelZ; return ((status & AccelValid) != 0); }
 	bool GetGyro (float &x, float &y, float &z) const { x = gyroX; y = gyroY; z = gyroZ; return ((status & GyroValid) != 0);	}
 	bool GetMag  (float &x, float &y, float &z) const { x = magX; y = magY; z = magZ; return ((status & MagValid) != 0);	}
+	bool GetHorizontalDir(float& v) const { v = horizontalDir; return ((status & HorizontalDirValid) != 0); }
 	bool GetElevationBaro(float& v) const { v = elevationBaro; return ((status & ElevBaroValid) != 0); }
 	bool GetElevationUS(float& v) const { v = elevationUS; return ((status & ElevUSValid) != 0); }
 	bool GetBatteryMotor(float& v) const { v = batteryMotor; return ((status & BatteryMotorValid) != 0); }

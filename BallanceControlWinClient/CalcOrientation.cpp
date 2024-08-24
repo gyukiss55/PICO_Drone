@@ -17,6 +17,6 @@ bool CalcOrientation(GearAccMagItem& gam)
 	double mYaw = atan2(mY, mX);
 	gam.pitch = aPitch * 180. / PI;
 	gam.roll = aRoll * 180. / PI;
-	gam.north = mYaw * 180. / PI;
+	gam.north = gam.horizontalDir;
 	return true;
 }
