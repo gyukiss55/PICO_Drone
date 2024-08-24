@@ -5,6 +5,7 @@
 
 DroneSensorData droneSensorDataCurrent;
 
-uint32_t droneSensorDataVectorIndex;
+uint32_t droneSensorDataVectorIndex1;
 
-DroneSensorData droneSensorDataVector[DroneSensorDataVectorSize];
+DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize1];
+

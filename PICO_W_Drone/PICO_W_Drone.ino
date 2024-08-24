@@ -6,6 +6,7 @@
 #include "MPU_6500_Drive.h" 
 #include "DeviceUART2.h" 
 #include "AsyncUDPServer.h"
+#include "DroneSensorData.h"
 
 //MPU6050 mpu;  // Create an object for the MPU6050/9250
 MPU9250_asukiaaa  mpu;  // Create an object for the MPU6050/9250
@@ -27,6 +28,7 @@ void loop()
 {
 	if (Measure_MPU_6500_Drive()) {
 		Measure_HC_SR04();
+		AddDroneSensorData (droneSensorDataCurrent);
 	}
 }
 

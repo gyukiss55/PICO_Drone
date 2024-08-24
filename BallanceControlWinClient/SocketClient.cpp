@@ -24,121 +24,8 @@
 #define DEFAULT_WEB_PORT "80"
 #define DEFAULT_UDP_PORT 8888
 
-int ConvertWebBuffer2SharedData (const std::wstring& webBuffer, SharedDataServer& sharedData)
-{
-    memset ((void *)&sharedData, 0, sizeof (SharedDataServer));
-    if (webBuffer.size () > 0) {
-        std::wstring  webStr (webBuffer);
-        std::wstring s1;
-        size_t  pos = webStr.find (L"ax=");
-        std::wstring::size_type sz;
-        while (pos < webBuffer.size ()) {
-            double ax = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"ay=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double ay = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"az=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double az = std::stod (webStr.substr (pos + 3), &sz);
 
-            sharedData.gearAccMag.acc[0] = (long)ax;
-            sharedData.gearAccMag.acc[1] = (long)ay;
-            sharedData.gearAccMag.acc[2] = (long)az;
-
-            pos = webStr.find (L"gx=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double gx = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"gy=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double gy = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"gz=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double gz = std::stod (webStr.substr (pos + 3), &sz);
-
-            sharedData.gearAccMag.gear[0] = (long)gx * 10;
-            sharedData.gearAccMag.gear[1] = (long)gy * 10;
-            sharedData.gearAccMag.gear[2] = (long)gz * 10;
-
-            pos = webStr.find (L"mx=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double mx = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"my=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double my = std::stod (webStr.substr (pos + 3), &sz);
-            pos = webStr.find (L"mz=", pos + 3 + sz, 3);
-            if (pos >= webBuffer.size ())
-                break;
-            double mz = std::stod (webStr.substr (pos + 3), &sz);
-
-            sharedData.gearAccMag.mag[0] = (long)mx * 10;
-            sharedData.gearAccMag.mag[1] = (long)my * 10;
-            sharedData.gearAccMag.mag[2] = (long)mz * 10;
-
-            pos = webStr.find (L"quatw=", pos + 3 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double qw = std::stod (webStr.substr (pos + 6), &sz);
-            pos = webStr.find (L"quatx=", pos + 6 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double qx = std::stod (webStr.substr (pos + 6), &sz);
-            pos = webStr.find (L"quaty=", pos + 6 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double qy = std::stod (webStr.substr (pos + 6), &sz);
-            pos = webStr.find (L"quatz=", pos + 6 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double qz = std::stod (webStr.substr (pos + 6), &sz);
-
-            sharedData.gearAccMag.quat[0] = qx;
-            sharedData.gearAccMag.quat[1] = qy;
-            sharedData.gearAccMag.quat[2] = qz;
-            sharedData.gearAccMag.quat[3] = qz;
-
-            pos = webStr.find (L"Yaw=", pos + 6 + sz, 4);
-            if (pos >= webBuffer.size ())
-                break;
-            double yaw = std::stod (webStr.substr (pos + 4), &sz);
-            pos = webStr.find (L"Pitch=", pos + 4 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double pitch = std::stod (webStr.substr (pos + 6), &sz);
-            pos = webStr.find (L"Roll=", pos + 6 + sz, 5);
-            if (pos >= webBuffer.size ())
-                break;
-            double roll = std::stod (webStr.substr (pos + 5), &sz);
-
-            sharedData.gearAccMag.north = yaw;
-            sharedData.gearAccMag.pitch = pitch;
-            sharedData.gearAccMag.roll = roll;
-
-            pos = webStr.find (L"Speed=", pos + 5 + sz, 6);
-            if (pos >= webBuffer.size ())
-                break;
-            double speedL = std::stod (webStr.substr (pos + 6), &sz);
-            pos = webStr.find (L", ", pos + 6 + sz, 2);
-            if (pos >= webBuffer.size ())
-                break;
-            double speedR = std::stod (webStr.substr (pos + 2), &sz);
-
-            sharedData.motorLeft.speed = speedL;
-            sharedData.motorRight.speed = speedR;
-
-            break;
-        }
-    }
-    return 0;
-}
-
-
+/*
 int WinWebSocketClient (const std::wstring& ipAddressStr, SharedDataServer& sharedData)
 {
     memset ((void*)&sharedData, 0, sizeof (SharedDataServer));
@@ -150,8 +37,9 @@ int WinWebSocketClient (const std::wstring& ipAddressStr, SharedDataServer& shar
     ConvertWebBuffer2SharedData (httpResponse, sharedData);
     return 0;
 }
+*/
 
-
+/*
 int WinSocketClient (const char* ipAddressStr, SharedDataServer& sharedData)
 {
     WSADATA wsaData;
@@ -269,11 +157,11 @@ int WinSocketClient (const char* ipAddressStr, SharedDataServer& sharedData)
 
     return 0;
 }
+*/
 
 
-int SendAndReceivePacket(const std::string& ipAddress, WORD port, const std::string& message, std::string& messageRet)
+int SendAndReceivePacket(const std::string& ipAddress, WORD port, SharedDataServer& sharedData)
 {
-    const char* pkt = message.c_str();
     const char* destIP = ipAddress.c_str();
     const char* srcIP = IP_ADDRESS_WEB_SERVER;;
 
@@ -294,9 +182,10 @@ int SendAndReceivePacket(const std::string& ipAddress, WORD port, const std::str
     SOCKET s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     bind(s, (sockaddr*)&local, sizeof(local));
 
-    sendto(s, pkt, strlen(pkt), 0, (sockaddr*)&dest, sizeof(dest));
+    sendto(s, (const char *) &sharedData.droneControlData, sizeof(DroneControlData), 0, (sockaddr*)&dest, sizeof(dest));
 
-#define DEFAULT_BUFLEN 512
+//#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 1024
 
     char recvbuf[DEFAULT_BUFLEN];
 //    int iSendResult;
@@ -312,8 +201,14 @@ int SendAndReceivePacket(const std::string& ipAddress, WORD port, const std::str
     iResult = recv(s, recvbuf, recvbuflen, 0);
     if (iResult > 0) {
         printf("Bytes received: %d\n", iResult);
-        recvbuf[iResult] = 0;
-        messageRet += std::string(recvbuf);
+        if (iResult % sizeof(DroneSensorData) == 0) {
+            uint32_t num = iResult / sizeof(DroneSensorData);
+            DroneSensorData* ptrRecv = (DroneSensorData*)&recvbuf[0];
+            for (droneSensorDataVectorIndex1 = 0; droneSensorDataVectorIndex1 < num && droneSensorDataVectorIndex1 < DroneSensorDataVectorSize1; droneSensorDataVectorIndex1++) {
+                droneSensorDataVector1[droneSensorDataVectorIndex1] = *ptrRecv;
+                ptrRecv++;
+            }
+        }
 
     }
     else if (iResult == 0)
@@ -331,154 +226,4 @@ int SendAndReceivePacket(const std::string& ipAddress, WORD port, const std::str
     return ret;
 }
 
-int ConvertUDPBuffer2SharedData(const std::string& udpBuffer, SharedDataServer& sharedData)
-{
-    memset((void*)&sharedData, 0, sizeof(SharedDataServer));
-    if (udpBuffer.size() > 0) {
-        std::string s1;
-        std::string::size_type sz;
-        std::string findStr("Ts:");
-        size_t  pos = udpBuffer.find(findStr);
-        if (pos >= udpBuffer.size())
-            return -1;
-        pos += findStr.size();
-        unsigned long ts = std::stoul(udpBuffer.substr(pos), &sz);
-        pos += sz;
-        sharedData.sec = ts / 1000;
-        sharedData.microSec = (ts % 1000) * 1000;
-        findStr = std::string("Raw: ");
-        pos = udpBuffer.find(findStr);
-        std::string separ (", ");
-        while (pos < udpBuffer.size()) {
-            pos += findStr.size();
-            double ax = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double ay = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double az = std::stod(udpBuffer.substr(pos), &sz);
-
-            sharedData.gearAccMag.acc[0] = ax;
-            sharedData.gearAccMag.acc[1] = ay;
-            sharedData.gearAccMag.acc[2] = az;
-
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double gx = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double gy = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double gz = std::stod(udpBuffer.substr(pos), &sz);
-
-            sharedData.gearAccMag.gear[0] = gx;
-            sharedData.gearAccMag.gear[1] = gy;
-            sharedData.gearAccMag.gear[2] = gz;
-
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double mx = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double my = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double mz = std::stod(udpBuffer.substr(pos), &sz);
-
-            sharedData.gearAccMag.mag[0] = mx;
-            sharedData.gearAccMag.mag[1] = my;
-            sharedData.gearAccMag.mag[2] = mz;
-/*
-            pos = udpBuffer.find("quatw=", pos + 3 + sz, 6);
-            if (pos >= udpBuffer.size())
-                break;
-            double qw = std::stod(udpBuffer.substr(pos + 6), &sz);
-            pos = udpBuffer.find("quatx=", pos + 6 + sz, 6);
-            if (pos >= udpBuffer.size())
-                break;
-            double qx = std::stod(udpBuffer.substr(pos + 6), &sz);
-            pos = udpBuffer.find("quaty=", pos + 6 + sz, 6);
-            if (pos >= udpBuffer.size())
-                break;
-            double qy = std::stod(udpBuffer.substr(pos + 6), &sz);
-            pos = udpBuffer.find("quatz=", pos + 6 + sz, 6);
-            if (pos >= udpBuffer.size())
-                break;
-            double qz = std::stod(udpBuffer.substr(pos + 6), &sz);
-
-            sharedData.gearAccMag.quat[0] = qx;
-            sharedData.gearAccMag.quat[1] = qy;
-            sharedData.gearAccMag.quat[2] = qz;
-            sharedData.gearAccMag.quat[3] = qz;
-*/
-            std::string ori("Orientation:");
-            pos = udpBuffer.find(ori, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += ori.size();
-            //separ = " ";
-            double yaw = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double pitch = std::stod(udpBuffer.substr(pos), &sz);
-            pos = udpBuffer.find(separ, pos + sz);
-            if (pos >= udpBuffer.size())
-                break;
-            pos += separ.size();
-            double roll = std::stod(udpBuffer.substr(pos), &sz);
-
-            sharedData.gearAccMag.north = yaw;
-            sharedData.gearAccMag.pitch = pitch;
-            sharedData.gearAccMag.roll = roll;
-/*
-
-            pos = udpBuffer.find("Speed=", pos + 5 + sz, 6);
-            if (pos >= udpBuffer.size())
-                break;
-            double speedL = std::stod(udpBuffer.substr(pos + 6), &sz);
-            pos = udpBuffer.find(separ, pos + 6 + sz, 2);
-            if (pos >= udpBuffer.size())
-                break;
-            double speedR = std::stod(udpBuffer.substr(pos + 2), &sz);
-
-            sharedData.motorLeft.speed = speedL;
-            sharedData.motorRight.speed = speedR;
-*/
-            break;
-        }
-    }
-    return 0;
-}
-
-int SendAndReceivePacket(const std::string& ipAddress, WORD port, SharedDataServer& sharedData)
-{
-    std::string sendMsg("ReadAHRS");
-    std::string receiveMsg;
-    int ret = SendAndReceivePacket(ipAddress, port, sendMsg, receiveMsg);
-    if (receiveMsg.length() > 0) {
-        ConvertUDPBuffer2SharedData(receiveMsg, sharedData);
-        return 0;
-    }
-    return -1;
-}
 

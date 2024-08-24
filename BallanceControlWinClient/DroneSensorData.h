@@ -1,5 +1,6 @@
 // DroneSensorData.h
 
+#pragma once
 
 class DroneSensorData {
 public:
@@ -90,11 +91,9 @@ public:
 
 extern DroneSensorData droneSensorDataCurrent;
 
-#define DroneSensorDataVectorSize 10 
+#define DroneSensorDataVectorSize1 10 
 
-extern uint32_t droneSensorDataVectorIndex;
-extern DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize];
-extern DroneSensorData droneSensorDataVector2[DroneSensorDataVectorSize];
+extern uint32_t droneSensorDataVectorIndex1; // for input
 
-void AddDroneSensorData(const DroneSensorData& data);
-void CloneDroneSensorDataVector();
+extern DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize1];
+

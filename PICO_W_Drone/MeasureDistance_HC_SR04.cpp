@@ -14,6 +14,7 @@
 
 #include "DeviceUART2.h"
 #include "DroneSensorData.h"
+#include "DebugLog.h"
 
 const int trigPin = 27;
 const int echoPin = 26;
@@ -38,11 +39,17 @@ float MeasureDistance()
 
 	float duration = pulseIn(echoPin, HIGH, 12000L);
 	float distance = (duration * .0343) / 2;
-	Serial2.print(millis());
-	Serial2.print(" duration: ");
-	Serial2.print(duration);
-	Serial2.print(", distance: ");
-	Serial2.println(distance);
+
+#if defined SERIAL2_DEBUG_LOG_LEVEL
+	if (CheckLogStateSerial2() > 0) {
+		Serial2.print(millis());
+		Serial2.print(" duration: ");
+		Serial2.print(duration);
+		Serial2.print(", distance: ");
+		Serial2.println(distance);
+	}
+#endif // defined SERIAL2_DEBUG_LOG_LEVEL
+
 	return distance;
 }
 
@@ -77,8 +84,15 @@ bool Measure_HC_SR04()
 		}
 	}
 	if (nr == 0) {
-		Serial.println("US distance measure failed!");
-		Serial2.println("US distance measure failed!");
+
+		static int cnt = 0;
+
+		cnt++;
+		if (cnt > 100) {
+			cnt = 0;
+			Serial.println("US distance measure failed!");
+			Serial2.println("US distance measure failed!");
+		}
 		return false;
 	}
 
@@ -95,11 +109,19 @@ bool Measure_HC_SR04()
 		log += std::to_string(distanceVector[i]);
 	}
 	log += "]\r\n\r\n";
-	Serial.print(log.c_str());
-	Serial2.println(log.c_str());
-	Serial2.print(millis());
-	Serial2.print(" -Distance: ");
-	Serial2.println(avrDist);
+#if defined SERIAL_DEBUG_LOG_LEVEL
+	if (CheckLogStateSerial(DEBUG_ID_2) > 0) {
+		Serial.print(log.c_str());
+	}
+#endif // SERIAL_DEBUG_LOG_LEVEL
+#if defined SERIAL_DEBUG_LOG_LEVEL
+	if (CheckLogStateSerial2(true) > 0) {
+		Serial2.println(log.c_str());
+		Serial2.print(millis());
+		Serial2.print(" -Distance: ");
+		Serial2.println(avrDist);
+	}
+#endif // SERIAL_DEBUG_LOG_LEVEL
 
 	return true;
 }

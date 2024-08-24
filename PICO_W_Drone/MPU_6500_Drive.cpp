@@ -6,6 +6,7 @@
 
 #include "MPU_6500_Drive.h" 
 #include "DroneSensorData.h"
+#include "DebugLog.h"
 
 //MPU6050 mpu;  // Create an object for the MPU6050/9250
 MPU9250_asukiaaa mySensor;
@@ -92,14 +93,19 @@ bool Measure_MPU_6500_Drive()
     int result;
 
     uint32_t currentTimeTick = millis();
-    if (currentTimeTick - lastTimeTick < 500) {
+    if (currentTimeTick - lastTimeTick < 100) {
         return false;
     }
     lastTimeTick = currentTimeTick;
 
     droneSensorDataCurrent = DroneSensorData(currentTimeTick);
+//  Serial.println("ts0 " + String(droneSensorDataCurrent.GetTimeStamp ()) + " ms"); // debug log
 
-    Serial.println("at " + String(currentTimeTick) + "ms");
+#if defined SERIAL_DEBUG_LOG_LEVEL
+    if (CheckLogStateSerial(DEBUG_ID_3) > 0) {
+        Serial.println("at " + String(currentTimeTick) + "ms");
+    }
+#endif // SERIAL_DEBUG_LOG_LEVEL
 
     result = mySensor.readId(&sensorId);
     if (result == 0) {
@@ -115,10 +121,15 @@ bool Measure_MPU_6500_Drive()
         aY = mySensor.accelY();
         aZ = mySensor.accelZ();
         aSqrt = mySensor.accelSqrt();
-        Serial.print("accel: " + String(aX));
-        Serial.print(", " + String(aY));
-        Serial.println(", " + String(aZ));
+
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_4) > 0) {
+            Serial.print("accel: " + String(aX));
+            Serial.print(", " + String(aY));
+            Serial.println(", " + String(aZ));
         //Serial.println("accelSqrt: " + String(aSqrt));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     } else {
         Serial.println("Cannod read accel values " + String(result));
     }
@@ -129,9 +140,13 @@ bool Measure_MPU_6500_Drive()
         gX = mySensor.gyroX();
         gY = mySensor.gyroY();
         gZ = mySensor.gyroZ();
-        Serial.print("gyro: " + String(gX));
-        Serial.print(", " + String(gY));
-        Serial.println(", " + String(gZ));
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.print("gyro: " + String(gX));
+            Serial.print(", " + String(gY));
+            Serial.println(", " + String(gZ));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     } else {
         Serial.println("Cannot read gyro values " + String(result));
     }
@@ -148,21 +163,30 @@ bool Measure_MPU_6500_Drive()
         mY = mySensor.magY();
         mZ = mySensor.magZ();
         mDirection = mySensor.magHorizDirection();
-
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_6) > 0) {
 #if defined (_CALIBRATE_MAG_SENSOR_)
-        Serial.println("mySensor.magXOffset = " + String(mySensor.magXOffset) + ";");
-        Serial.println("mySensor.maxYOffset = " + String(mySensor.magYOffset) + ";");
-        Serial.println("mySensor.magZOffset = " + String(mySensor.magZOffset) + ";");
+            Serial.println("mySensor.magXOffset = " + String(mySensor.magXOffset) + ";");
+            Serial.println("mySensor.maxYOffset = " + String(mySensor.magYOffset) + ";");
+            Serial.println("mySensor.magZOffset = " + String(mySensor.magZOffset) + ";");
 #endif
 
-        Serial.print("mag: " + String(mX));
-        Serial.print(", " + String(mY));
-        Serial.println(", " + String(mZ));
-        Serial.println("horizontal direction: " + String(mDirection));
+            Serial.print("mag: " + String(mX));
+            Serial.print(", " + String(mY));
+            Serial.println(", " + String(mZ));
+            Serial.println("horizontal direction: " + String(mDirection));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
+
     } else {
         Serial.println("Cannot read mag values " + String(result));
     }
 
-    Serial.println(""); // Add an empty line
+#if defined SERIAL_DEBUG_LOG_LEVEL
+    if (CheckLogStateSerial(DEBUG_ID_7) > 0) {
+        Serial.println(""); // Add an empty line
+    }
+#endif // SERIAL_DEBUG_LOG_LEVEL
+
     return true;
 }

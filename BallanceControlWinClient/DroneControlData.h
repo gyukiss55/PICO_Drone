@@ -1,5 +1,6 @@
 // DroneControlData.h
 
+#pragma once
 
 class DroneControlData {
 	char		structMark[4];

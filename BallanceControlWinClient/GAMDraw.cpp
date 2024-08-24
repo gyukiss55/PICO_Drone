@@ -10,10 +10,12 @@
 #include <array>
 #include <map>
 #include <string>
+#include <debugapi.h>
 
 #include "SocketClient.h"
 #include "GAMDraw.h"
 #include "GearAccMag.h"
+#include "DroneSensorData.h"
 #include "CalcOrientation.h"
 
 #define COLOR_RED		RGB (255, 0, 0)
@@ -23,7 +25,8 @@
 #define COLOR_BLACK		RGB (0, 0, 0)
 
 #define SERVER_IP_ADDRESS		"192.168.50.173"
-#define UDPSERVER_IP_ADDRESS	"192.168.50.173"
+//#define UDPSERVER_IP_ADDRESS	"192.168.50.173"
+#define UDPSERVER_IP_ADDRESS	"192.168.50.114"
 #define UDPSERVER_PORT			8888
 #define LOG_BUFFER_LENGTH		512
 
@@ -58,6 +61,8 @@ void ReleasePens ()
 		DeleteObject (i.second);
 }
 
+
+
 void ReadSocketClient (HWND hWnd)
 {
 	static SharedDataServer sharedDataPrev;
@@ -71,38 +76,58 @@ void ReadSocketClient (HWND hWnd)
 //	if (sharedData.cycle == sharedDataPrev.cycle)
 //		return;
 
-	GearAccMagItem item;
-	for (int i = 0; i < 3; ++i) {
-		item.acc[i] = sharedData.gearAccMag.acc[i];
-		item.gear[i] = sharedData.gearAccMag.gear[i];
-		item.mag[i] = sharedData.gearAccMag.mag[i];
+	for (size_t i = 0; i < droneSensorDataVectorIndex1; i++) {
+		const DroneSensorData& sd = droneSensorDataVector1[i];
+		if (sd.GetTimeStamp() <= sharedDataPrev.lastTimestamp) {
+			continue;
+		}
+		sharedDataPrev.lastTimestamp = sd.GetTimeStamp();
+		GearAccMagItem item;
+		sd.GetAccel(item.acc[0], item.acc[1], item.acc[2]);
+		sd.GetGyro(item.gear[0], item.gear[1], item.gear[2]);
+		sd.GetMag(item.mag[0], item.mag[1], item.mag[2]);
+		sd.GetElevationUS(item.elevationUS);
+		sd.GetElevationBaro(item.elevationBaro);
+		sd.GetBatteryMotor(item.batteryMotor);
+		sd.GetBatteryMPU(item.batteryMPU);
 
+		item.microsec = (sd.GetTimeStamp() % 1000) * 1000;
+		item.sec = sd.GetTimeStamp() / 1000;
+	//	item.pitch = sharedData.gearAccMag.pitch;
+	//	item.roll = sharedData.gearAccMag.roll;
+	//	item.north = sharedData.gearAccMag.north;
+
+	//	item.speed[0] = sharedData.motorLeft.speed;
+	//	item.speed[1] = sharedData.motorRight.speed;
+
+		arrayGAM[indexGAM] = item;
+		indexGAM++;
+		if (indexGAM >= SIZEOFGAMARRAY)
+			indexGAM = 0;
+		if (numGAM < SIZEOFGAMARRAY)
+			numGAM++;
 	}
-//	for (int i = 0; i < 4; ++i) {
-//		item.quat[i] = sharedData.gearAccMag.quat[i];
-//	}
-	item.microsec = sharedData.microSec;
-	item.sec = sharedData.sec;
-	item.pitch = sharedData.gearAccMag.pitch;
-	item.roll = sharedData.gearAccMag.roll;
-	item.north = sharedData.gearAccMag.north;
-
-//	item.speed[0] = sharedData.motorLeft.speed;
-//	item.speed[1] = sharedData.motorRight.speed;
-
-	arrayGAM[indexGAM] = item;
-	indexGAM++;
-	if (indexGAM >= SIZEOFGAMARRAY)
-		indexGAM = 0;
-	if (numGAM < SIZEOFGAMARRAY)
-		numGAM++;
+	{ // debug log
+		std::string log;
+		for (size_t i = 0; i < droneSensorDataVectorIndex1; i++) {
+			if (i == 0)
+				log = "Ts:";
+			log += std::to_string(droneSensorDataVector1[i].GetTimeStamp());
+			if (i < droneSensorDataVectorIndex1 - 1)
+				log += ", ";
+			else
+				log += "\r\n";
+		}
+		OutputDebugStringA(log.c_str ());
+	}
 	
 	InvalidateRect (hWnd, nullptr, FALSE);
 
     char logStr[LOG_BUFFER_LENGTH];
-    snprintf (logStr, LOG_BUFFER_LENGTH, "Cycle read: %d  length: %d \n ", sharedData.cycle, sharedData.sizeOfData);
+    snprintf (logStr, LOG_BUFFER_LENGTH, "Cycle read: %d  length: %d \n ", sharedData.cycle, sharedData.droneSensorDataVectorNumber * sizeof(DroneSensorData));
     OutputDebugStringA (logStr);
 }
+
 
 
 void DrawLine (HWND /*hWnd*/, HDC hDC, INT32 x1, INT32 x2, double v1, double v2, COLORREF color, UINT32 offsY, INT32 sizeY, double minY, double maxY)

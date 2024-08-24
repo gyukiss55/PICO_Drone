@@ -4,6 +4,8 @@
 #include <Winhttp.h>
 #include <string>
 
+#include "DroneSensorData.h"
+#include "DroneControlData.h"
 
 #define IP_ADDRESS_WEB_SERVER "192.168.50.173"
 
@@ -48,20 +50,15 @@ struct PIDStatus {
 
 };
 
+#define DroneSensorDataVectorSize 10
 
 struct SharedDataServer {
-	long			sizeOfData;
-	char			nameOfData[16];
-
-	GearAccMag		gearAccMag;
-	MotorStatus		motorLeft;
-	MotorStatus		motorRight;
-	PIDStatus		pidTunning;
-
-	long			sec;
-	long			microSec;
-	unsigned long	cycle;
-	bool			stop;
+	uint32_t			cycle;
+	uint32_t			lastTimestamp;
+	uint32_t			droneSensorDataVectorNumber;
+	DroneSensorData		droneSensorDataVector[DroneSensorDataVectorSize];
+	DroneControlData	droneControlData;
+	SharedDataServer() : cycle(0), lastTimestamp(0), droneSensorDataVectorNumber(0) { ; }
 };
 
 

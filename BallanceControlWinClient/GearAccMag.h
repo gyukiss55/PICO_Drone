@@ -5,18 +5,22 @@ struct GearAccMagItem {
 	unsigned long	microsec;
 	unsigned long	sec;
 
-	double			pitch;
-	double			roll;
-	double			north;
-	double			gear[3];
-	double			acc[3];
-	double			mag[3];
+	float			pitch;
+	float			roll;
+	float			north;
+	float			gear[3];
+	float			acc[3];
+	float			mag[3];
 
+	float			elevationUS;
+	float			elevationBaro;
+	float			batteryMotor;
+	float			batteryMPU;
 	//	double			quat[4];
 
 	//	double			speed[2];
 
-	GearAccMagItem() : pitch(0.), roll(0.), north(0.)
+	GearAccMagItem() : pitch(0.), roll(0.), north(0.), elevationUS(0.), elevationBaro(0.), batteryMotor(0.), batteryMPU(0.)
 	{ }
 };
 
