@@ -65,14 +65,18 @@ void setupAsyncUDPServer()
             //packet.printf("Got %u bytes of data.", packet.length());
             //packet.printf("Send DroneSensorDataVector %u/%u bytes of data:", sizeof (droneSensorDataVector2), sizeof(droneSensorDataVector2[0]));
 //            Serial.println("ts3 " + String(droneSensorDataVector2[0].GetTimeStamp()) + " ms"); // debug log
-            packet.write((uint8_t *) &droneSensorDataVector2[0], sizeof(droneSensorDataVector2));
+            packet.write((uint8_t *) &droneExportData, sizeof(droneExportData));
             });
     }
 }
 
 void loopAsyncUDPServer()
 {
-    delay(1000);
+    static uint32_t lastTS = 0;
+    uint32_t currTS = millis ();
+    if (currTS - lastTS < 1000)
+        return;
+    lastTS = currTS;
     //Send broadcast
     udp.broadcast("Anyone here?");
 }

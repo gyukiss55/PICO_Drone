@@ -76,8 +76,8 @@ void ReadSocketClient (HWND hWnd)
 //	if (sharedData.cycle == sharedDataPrev.cycle)
 //		return;
 
-	for (size_t i = 0; i < droneSensorDataVectorIndex1; i++) {
-		const DroneSensorData& sd = droneSensorDataVector1[i];
+	for (size_t i = 0; i < droneSensorDataVectorIndex; i++) {
+		const DroneSensorData& sd = droneExportData.droneSensorDataVector[i];
 		if (sd.GetTimeStamp() <= sharedDataPrev.lastTimestamp) {
 			continue;
 		}
@@ -110,16 +110,28 @@ void ReadSocketClient (HWND hWnd)
 	}
 	{ // debug log
 		std::string log;
-		for (size_t i = 0; i < droneSensorDataVectorIndex1; i++) {
+		for (size_t i = 0; i < droneSensorDataVectorIndex; i++) {
 			if (i == 0)
 				log = "Ts:";
-			log += std::to_string(droneSensorDataVector1[i].GetTimeStamp());
-			if (i < droneSensorDataVectorIndex1 - 1)
+			log += std::to_string(droneExportData.droneSensorDataVector[i].GetTimeStamp());
+			if (i < droneSensorDataVectorIndex - 1)
 				log += ", ";
 			else
 				log += "\r\n";
 		}
 		OutputDebugStringA(log.c_str ());
+		std::string gpsStr = droneExportData.droneGPSData.GetGPGGA();
+		if (gpsStr.length() > 0) {
+			OutputDebugStringA(gpsStr.c_str());
+		}
+		gpsStr = droneExportData.droneGPSData.GetGPGSA();
+		if (gpsStr.length() > 0) {
+			OutputDebugStringA(gpsStr.c_str());
+		}
+		gpsStr = droneExportData.droneGPSData.GetGPGSA();
+		if (gpsStr.length() > 0) {
+			OutputDebugStringA(gpsStr.c_str());
+		}
 	}
 	
 	InvalidateRect (hWnd, nullptr, FALSE);

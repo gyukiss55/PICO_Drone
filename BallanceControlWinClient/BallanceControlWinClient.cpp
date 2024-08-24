@@ -13,7 +13,7 @@
 
 #define IDT_TIMER1		1
 
-#define CLIENT_TIME_INTERVAL    200
+#define CLIENT_TIME_INTERVAL    500
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance

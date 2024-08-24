@@ -1,5 +1,22 @@
 // DroneSensorData.h
 
+#include <string.h>
+
+#define GPLength 100
+
+class DroneGPSData {
+	char		GPGGA[GPLength];
+	char		GPGSA[GPLength];
+	char		GPRMC[GPLength];
+public:
+	DroneGPSData() : GPGGA(""), GPGSA(""), GPRMC("") {}
+	void SetGPGGA(const char* s) { strcpy(GPGGA, s); }
+	void SetGPGSA(const char* s) { strcpy(GPGSA, s); }
+	void SetGPRMC(const char* s) { strcpy(GPRMC, s); }
+	const char* GetGPGGA() const { return GPGGA; }
+	const char* GetGPGSA() const { return GPGSA; }
+	const char* GetGPRMC() const { return GPRMC; }
+};
 
 class DroneSensorData {
 public:
@@ -13,7 +30,10 @@ public:
 		ElevBaroValid = 16,
 		ElevUSValid = 32,
 		BatteryMotorValid = 64,
-		BatteryMPUValid = 128
+		BatteryMPUValid = 128,
+		GPGGAValid = 256,
+		GPGSAValid = 512,
+		GPRMCValid = 1024
 	};
 private:
 	char		structMark[4];
@@ -92,13 +112,19 @@ public:
 	bool GetBatteryMPU(float& v) const { v = batteryMPU; return ((status & BatteryMPUValid) != 0); }
 };
 
-extern DroneSensorData droneSensorDataCurrent;
-
 #define DroneSensorDataVectorSize 10 
+
+struct DroneExportData {
+	DroneSensorData droneSensorDataVector[DroneSensorDataVectorSize];
+	DroneGPSData droneGPSData;
+};
+
+extern DroneSensorData droneSensorDataCurrent;
 
 extern uint32_t droneSensorDataVectorIndex;
 extern DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize];
-extern DroneSensorData droneSensorDataVector2[DroneSensorDataVectorSize];
+
+extern DroneExportData droneExportData;
 
 void AddDroneSensorData(const DroneSensorData& data);
 void CloneDroneSensorDataVector();

@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <string.h>
+
 class DroneControlData {
 	char		structMark[4];
 	uint32_t	structSize;

@@ -8,7 +8,9 @@ DroneSensorData droneSensorDataCurrent;
 uint32_t droneSensorDataVectorIndex;
 
 DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize];
-DroneSensorData droneSensorDataVector2[DroneSensorDataVectorSize];
+
+DroneExportData droneExportData;
+
 
 volatile bool lockDroneSensorDataVector = false;
 
@@ -33,7 +35,7 @@ void CloneDroneSensorDataVector()
 	for (uint32_t i = 0; i < DroneSensorDataVectorSize; i++, j++) {
 		if (j >= DroneSensorDataVectorSize)
 			j = 0;
-		droneSensorDataVector2[i] = droneSensorDataVector1[j];
+		droneExportData.droneSensorDataVector[i] = droneSensorDataVector1[j];
 //		Serial.println("ts2 " + String(droneSensorDataVector2[i].GetTimeStamp()) + " ms"); // debug log
 	}
 	lockDroneSensorDataVector = false;

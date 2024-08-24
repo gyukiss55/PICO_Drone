@@ -5,6 +5,7 @@
 #include "MeasureDistance_HC_SR04.h" 
 #include "MPU_6500_Drive.h" 
 #include "DeviceUART2.h" 
+#include "DeviceGPS.h" 
 #include "AsyncUDPServer.h"
 #include "DroneSensorData.h"
 
@@ -35,9 +36,11 @@ void loop()
 void setup1()
 {
 	setupAsyncUDPServer ();
+	setupDeviceGPS ();
 }
 void loop1()
 {
+	loopDeviceGPS ();
 	if (!setupDone)
 		return;
 	loopAsyncUDPServer ();

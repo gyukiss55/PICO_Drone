@@ -3,9 +3,7 @@
 
 #include "DroneSensorData.h"
 
-DroneSensorData droneSensorDataCurrent;
+uint32_t droneSensorDataVectorIndex;
 
-uint32_t droneSensorDataVectorIndex1;
-
-DroneSensorData droneSensorDataVector1[DroneSensorDataVectorSize1];
+DroneExportData droneExportData;
 
