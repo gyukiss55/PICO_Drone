@@ -8,6 +8,8 @@
 #include "DeviceGPS.h" 
 #include "AsyncUDPServer.h"
 #include "DroneSensorData.h"
+#include "MotorControl.h"
+
 
 //MPU6050 mpu;  // Create an object for the MPU6050/9250
 MPU9250_asukiaaa  mpu;  // Create an object for the MPU6050/9250
@@ -19,6 +21,7 @@ void setup()
 	// Initialize the Serial Monitor
 	Serial.begin(115200);
 	delay(2000);
+	setupMotorControl ();
 	setupDeviceUART2 (115200, String ("Setup Serial 2 baud:115200"));
 	setupMPU_6500_Drive();
 	setupHC_SR04();
@@ -27,6 +30,7 @@ void setup()
 
 void loop()
 {
+	loopMotorControl ();
 	if (Measure_MPU_6500_Drive()) {
 		Measure_HC_SR04();
 		AddDroneSensorData (droneSensorDataCurrent);
