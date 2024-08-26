@@ -111,7 +111,11 @@ bool Measure_MPU_6500_Drive()
     if (result == 0) {
         //Serial.println("sensorId: " + String(sensorId));
     } else {
-        Serial.println("Cannot read sensorId " + String(result));
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.println("Cannot read sensorId " + String(result));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     }
 
     result = mySensor.accelUpdate();
@@ -131,7 +135,11 @@ bool Measure_MPU_6500_Drive()
         }
 #endif // SERIAL_DEBUG_LOG_LEVEL
     } else {
-        Serial.println("Cannod read accel values " + String(result));
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.println("Cannod read accel values " + String(result));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     }
 
     result = mySensor.gyroUpdate();
@@ -148,12 +156,20 @@ bool Measure_MPU_6500_Drive()
         }
 #endif // SERIAL_DEBUG_LOG_LEVEL
     } else {
-        Serial.println("Cannot read gyro values " + String(result));
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.println("Cannot read gyro values " + String(result));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     }
 
     result = mySensor.magUpdate();
     if (result != 0) {
-        Serial.println("cannot read mag so call begin again");
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.println("cannot read mag so call begin again");
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
         mySensor.beginMag();
         result = mySensor.magUpdate();
     }
@@ -180,7 +196,11 @@ bool Measure_MPU_6500_Drive()
 #endif // SERIAL_DEBUG_LOG_LEVEL
 
     } else {
-        Serial.println("Cannot read mag values " + String(result));
+#if defined SERIAL_DEBUG_LOG_LEVEL
+        if (CheckLogStateSerial(DEBUG_ID_5) > 0) {
+            Serial.println("Cannot read mag values " + String(result));
+        }
+#endif // SERIAL_DEBUG_LOG_LEVEL
     }
 
 #if defined SERIAL_DEBUG_LOG_LEVEL

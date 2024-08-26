@@ -1,6 +1,7 @@
 #include <Wire.h>
 //#include <MPU6050.h>  // Use MPU9250.h if you have MPU-9250
 #include <MPU9250_asukiaaa.h>
+#include <string>
 
 #include "MeasureDistance_HC_SR04.h" 
 #include "MPU_6500_Drive.h" 
@@ -30,7 +31,21 @@ void setup()
 
 void loop()
 {
-	loopMotorControl ();
+	std::string command;
+	while(Serial.available ()) {
+		command += Serial.read ();
+	}
+	if (command.length () > 0) {
+		int v = std::stoi( command );
+		Serial.print("command:");
+		Serial.print(command.c_str());
+		if (v >=1000 && v <= 2000) {
+			SetSpeedMotor (1, v);
+		} else {
+			Serial.println(" INVALID!");
+		}
+	}
+	//loopMotorControl ();
 	if (Measure_MPU_6500_Drive()) {
 		Measure_HC_SR04();
 		AddDroneSensorData (droneSensorDataCurrent);

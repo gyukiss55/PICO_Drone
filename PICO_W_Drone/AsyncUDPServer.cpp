@@ -7,11 +7,20 @@
 #include "AsyncUDPServer.h"
 #include "DroneSensorData.h"
 #include "DebugLog.h"
+#include "WifiNetworkScenner.h"
 
 #ifndef STASSID
 #define STASSID "RTAX999"
 #define STAPSK "LiDoDa#959285$"
 #endif
+
+const char* WifiConnections[] = {
+    "HUAWEI P30", "6381bf07b666",
+    "RTAX999", "LiDoDa#959285$",
+    "RTAX999_EXT", "LiDoDa#959285$",
+    "ASUS_98_2G", "LiDoDa#959285$",
+    nullptr, nullptr
+};
 
 #define UDPPORT 8888
 
@@ -23,8 +32,17 @@ AsyncUDP udp;
 void setupAsyncUDPServer()
 {
     Serial.begin(115200);
+
+    int ssidIndex = WifiNetworkScenner(WifiConnections);
+    if (ssidIndex < 0) {
+        Serial.println("WiFi Failed");
+        while (1) {
+            delay(1000);
+        }
+    }
+
     WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, password);
+    WiFi.begin(WifiConnections[ssidIndex], WifiConnections[ssidIndex + 1]);
     if (WiFi.waitForConnectResult() != WL_CONNECTED) {
         Serial.println("WiFi Failed");
         while (1) {
