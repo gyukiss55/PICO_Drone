@@ -56,7 +56,7 @@ int WifiNetworkScenner(const char* kownWifiConnections[])
             Serial.printf("%c%32s %5s %17s %2d %4d\r\n", stat, WiFi.SSID(i), encToString(WiFi.encryptionType(i)), macToString(bssid), WiFi.channel(i), WiFi.RSSI(i));
         }
     }
-//    Serial1.printf("\r\n--- Sleeping ---\r\n\r\n\r\n");
+//    Serial.printf("\r\n--- Sleeping ---\r\n\r\n\r\n");
 //    delay(5000);
     return result;
 }

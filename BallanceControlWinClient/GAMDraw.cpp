@@ -1,9 +1,6 @@
 // GAMDraw.cpp : Defines the entry point for the application.
 //
 
-
-
-
 #include "framework.h"
 #include "BallanceControlWinClient.h"
 #include <stdio.h>
@@ -32,13 +29,10 @@
 
 #define SIZEOFGAMARRAY 4000
 
-
-
 static std::array<GearAccMagItem, SIZEOFGAMARRAY> arrayGAM;
 static std::map<COLORREF, HPEN> mapHPEN;
 UINT32 indexGAM = 0;
 UINT32 numGAM = 0;
-
 
 bool GetPenObject (COLORREF color, HPEN& hPen)
 {
@@ -69,6 +63,14 @@ void ReadSocketClient (HWND hWnd)
 	if (numGAM == 0)
 		sharedDataPrev.cycle = 0;
     SharedDataServer sharedData;
+	sharedData.droneControlData = currentControl;
+	{
+		uint32_t s1, s2, s3, s4;
+		currentControl.GetSpeed(s1, s2, s3, s4);
+		std::string log = "tt:" + std::to_string((int)currentControl.GetTimeStamp());
+		log += "speed:" + std::to_string((int)s1), ", " + std::to_string((int)s2), ", " + std::to_string((int)s3), ", " + std::to_string((int)s4), "\r\n";
+		OutputDebugStringA(log.c_str());
+	}
 	std::string ipAddress (UDPSERVER_IP_ADDRESS);
 //	std::string ipAddress (SERVER_IP_ADDRESS);
 //    WinWebSocketClient (ipAddress, sharedData);
@@ -246,4 +248,109 @@ void GAMDraw (HWND hWnd, HDC hdc)
 		DrawCurves (hWnd, hdc, indexGlobal, numGAM);
 
 	indexGlobal++;
+}
+
+static bool  initDone = false;
+static uint32_t motorSelect = 0;
+static uint32_t motorStep = 1;
+
+void AddSpeed()
+{
+	uint32_t s1, s2, s3, s4;
+	temporaryControl.GetSpeed(s1,s2,s3,s4);
+	switch (motorSelect) {
+	case 0:
+		s1 += motorStep;
+		s2 += motorStep;
+		s3 += motorStep;
+		s4 += motorStep;
+		break;
+	case 1:
+		s1 += motorStep;
+		break;
+	case 2:
+		s2 += motorStep;
+		break;
+	case 3:
+		s3 += motorStep;
+		break;
+	case 4:
+		s4 += motorStep;
+		break;
+
+	}
+	temporaryControl.SetSpeed(s1, s2, s3, s4);
+}
+
+void SubtractSpeed()
+{
+	uint32_t s1, s2, s3, s4;
+	temporaryControl.GetSpeed(s1, s2, s3, s4);
+	switch (motorSelect) {
+	case 0:
+		s1 -= motorStep;
+		s2 -= motorStep;
+		s3 -= motorStep;
+		s4 -= motorStep;
+		break;
+	case 1:
+		s1 -= motorStep;
+		break;
+	case 2:
+		s2 -= motorStep;
+		break;
+	case 3:
+		s3 -= motorStep;
+		break;
+	case 4:
+		s4 -= motorStep;
+		break;
+
+	}
+	temporaryControl.SetSpeed(s1, s2, s3, s4);
+}
+
+void WMKeyDownFunction(WPARAM wParam)
+{
+	if (!initDone) {
+		currentControl.SetSpeed(MotorReset, MotorReset, MotorReset, MotorReset);
+		initDone = true;
+	}
+	switch (wParam) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+			motorSelect = wParam - '0';
+			break;
+		case VK_ESCAPE:
+			motorSelect = 0;
+			motorStep = 1;
+			temporaryControl.SetSpeed(MotorReset, MotorReset, MotorReset, MotorReset);
+			break;
+		case VK_ADD:
+			AddSpeed ();
+			break;
+		case VK_SUBTRACT:
+			SubtractSpeed ();
+			break;
+		case VK_F1:
+			motorStep = 1;
+			break;
+		case VK_F2:
+			motorStep = 5;
+			break;
+		case VK_F3:
+			motorStep = 20;
+			break;
+		case VK_F5:
+			temporaryControl.SetSpeed(Motor1StopSpeed, Motor2StopSpeed, Motor3StopSpeed, Motor4StopSpeed);
+			break;
+		case VK_F6:
+			temporaryControl.SetSpeed(Motor1StartSpeed, Motor2StartSpeed, Motor3StartSpeed, Motor4StartSpeed);
+			break;
+	}
+	temporaryControl.UpdateTimetick();
+	currentControl = temporaryControl;
 }

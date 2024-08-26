@@ -179,6 +179,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
         break;
+    case WM_KEYDOWN:
+    {
+        TCHAR szBuffer[256];
+        wsprintf(szBuffer, TEXT("WM_KEYDOWN: Virtual-Key Code = %d\n"), wParam);
+        OutputDebugString(szBuffer);
+        WMKeyDownFunction(wParam);
+        break;
+    }
+    case WM_KEYUP:
+    {
+        TCHAR szBuffer[256];
+        wsprintf(szBuffer, TEXT("WM_KEYUP: Virtual-Key Code = %d\n"), wParam);
+        OutputDebugString(szBuffer);
+        break;
+    }
+    case WM_CHAR:
+    {
+        TCHAR szBuffer[256];
+        wsprintf(szBuffer, TEXT("WM_CHAR: Character = %c\n"), (TCHAR)wParam);
+        OutputDebugString(szBuffer);
+        break;
+    }
     case WM_DESTROY:
         ReleasePens ();
         PostQuitMessage(0);

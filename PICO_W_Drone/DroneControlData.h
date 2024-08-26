@@ -22,11 +22,17 @@ public:
 		speedMotor1 (0), speedMotor2(0), speedMotor3(0), speedMotor4(0),
 		function (0), validSpeed (false), validFunction (false)
 	{}
+
 	DroneControlData(uint32_t ts) :
 		structMark("DCD"), structSize(sizeof(DroneControlData)), timeStamp(ts),
 		speedMotor1(0), speedMotor2(0), speedMotor3(0), speedMotor4(0),
 		function(0), validSpeed(false), validFunction(false)
 	{}
+
+	uint32_t GetTimeStamp() const {
+		return timeStamp;
+	}
+
 	void SetSpeed(uint32_t s1, uint32_t s2, uint32_t s3, uint32_t s4) {
 		speedMotor1 = s1;
 		speedMotor2 = s2;
@@ -34,6 +40,7 @@ public:
 		speedMotor4 = s4;
 		validSpeed = true;
 	}
+
 	void SetFunction(uint32_t f) {
 		function = f;
 		validFunction = true;

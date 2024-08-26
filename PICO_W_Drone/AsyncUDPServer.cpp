@@ -5,7 +5,9 @@
 #include <AsyncUDP.h>
 
 #include "AsyncUDPServer.h"
+#include "DroneControlData.h"
 #include "DroneSensorData.h"
+#include "MotorControl.h"
 #include "DebugLog.h"
 #include "WifiNetworkScenner.h"
 
@@ -77,6 +79,9 @@ void setupAsyncUDPServer()
                     Serial.println();
                 }
 #endif
+                if (packet.length() == sizeof(DroneControlData)) {
+                    currentControl = *(const DroneControlData*)packet.data();
+                }
             }
             //reply to the client
             CloneDroneSensorDataVector();
@@ -84,6 +89,24 @@ void setupAsyncUDPServer()
             //packet.printf("Send DroneSensorDataVector %u/%u bytes of data:", sizeof (droneSensorDataVector2), sizeof(droneSensorDataVector2[0]));
 //            Serial.println("ts3 " + String(droneSensorDataVector2[0].GetTimeStamp()) + " ms"); // debug log
             packet.write((uint8_t *) &droneExportData, sizeof(droneExportData));
+
+            if (currentControl.GetTimeStamp() != previousControl.GetTimeStamp()) {
+                previousControl = currentControl;
+                uint32_t s1, s2, s3, s4;
+                if (previousControl.GetSpeed(s1, s2, s3, s4)) {
+                    SetSpeedMotor(s1,s2,s3,s4);
+                    Serial.print("Speed: ");
+                    Serial.print(s1);
+                    Serial.print(", ");
+                    Serial.print(s2);
+                    Serial.print(", ");
+                    Serial.print(s3);
+                    Serial.print(", ");
+                    Serial.println(s4);
+
+               }
+            }
+
             });
     }
 }

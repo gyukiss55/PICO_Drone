@@ -4,6 +4,19 @@
 
 #include <string.h>
 
+#define MotorReset 1000
+#define MotorSpeedMax 2000
+
+#define Motor1StopSpeed 1210
+#define Motor2StopSpeed 1210
+#define Motor3StopSpeed 1210
+#define Motor4StopSpeed 1210
+
+#define Motor1StartSpeed 1220
+#define Motor2StartSpeed 1220
+#define Motor3StartSpeed 1220
+#define Motor4StartSpeed 1220
+
 class DroneControlData {
 	char		structMark[4];
 	uint32_t	structSize;
@@ -25,18 +38,28 @@ public:
 		speedMotor1 (0), speedMotor2(0), speedMotor3(0), speedMotor4(0),
 		function (0), validSpeed (false), validFunction (false)
 	{}
+
 	DroneControlData(uint32_t ts) :
 		structMark("DCD"), structSize(sizeof(DroneControlData)), timeStamp(ts),
 		speedMotor1(0), speedMotor2(0), speedMotor3(0), speedMotor4(0),
 		function(0), validSpeed(false), validFunction(false)
 	{}
+
+	uint32_t GetTimeStamp() const { return timeStamp; }
+	void UpdateTimetick();
+
 	void SetSpeed(uint32_t s1, uint32_t s2, uint32_t s3, uint32_t s4) {
-		speedMotor1 = s1;
-		speedMotor2 = s2;
-		speedMotor3 = s3;
-		speedMotor4 = s4;
+		if (s1 >= MotorReset && s1<= MotorSpeedMax)
+			speedMotor1 = s1;
+		if (s2 >= MotorReset && s2 <= MotorSpeedMax)
+			speedMotor2 = s2;
+		if (s3 >= MotorReset && s3 <= MotorSpeedMax)
+			speedMotor3 = s3;
+		if (s4 >= MotorReset && s4 <= MotorSpeedMax)
+			speedMotor4 = s4;
 		validSpeed = true;
 	}
+
 	void SetFunction(uint32_t f) {
 		function = f;
 		validFunction = true;
@@ -63,4 +86,4 @@ public:
 };
 
 extern DroneControlData currentControl;
-extern DroneControlData previousControl;
+extern DroneControlData temporaryControl;

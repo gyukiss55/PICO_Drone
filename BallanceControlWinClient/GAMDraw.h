@@ -8,3 +8,5 @@ void GAMDraw (HWND hWnd, HDC hdc);
 
 void ReleasePens ();
 
+void WMKeyDownFunction(WPARAM wParam);
+
