@@ -10,7 +10,7 @@
 #include "WifiNetworkScenner.h"
 
 #ifndef STASSID
-#define STASSID "RTAX999"
+#define STASSID "RTAX999_EXT"
 #define STAPSK "LiDoDa#959285$"
 #endif
 
