@@ -7,15 +7,15 @@
 #define MotorReset 1000
 #define MotorSpeedMax 2000
 
-#define Motor1StopSpeed 1210
-#define Motor2StopSpeed 1210
-#define Motor3StopSpeed 1210
-#define Motor4StopSpeed 1210
+#define Motor1StopSpeed 1220
+#define Motor2StopSpeed 1182
+#define Motor3StopSpeed 1218
+#define Motor4StopSpeed 1198
 
-#define Motor1StartSpeed 1220
-#define Motor2StartSpeed 1220
-#define Motor3StartSpeed 1220
-#define Motor4StartSpeed 1220
+#define Motor1StartSpeed 1232
+#define Motor2StartSpeed 1192
+#define Motor3StartSpeed 1229
+#define Motor4StartSpeed 1212
 
 class DroneControlData {
 	char		structMark[4];
@@ -66,6 +66,7 @@ public:
 	}
 
 	bool GetSpeed(uint32_t& s1, uint32_t& s2, uint32_t& s3, uint32_t& s4) {
+		s1 = s2 = s3 = s4 = 0;
 		if (validSpeed) {
 			s1 = speedMotor1;
 			s2 = speedMotor2;
@@ -77,6 +78,7 @@ public:
 	}
 
 	bool GetFunction(uint32_t& f) {
+		f = 0;
 		if (validFunction) {
 			f = function;
 			return true;

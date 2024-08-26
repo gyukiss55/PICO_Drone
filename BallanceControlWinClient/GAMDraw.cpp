@@ -55,8 +55,6 @@ void ReleasePens ()
 		DeleteObject (i.second);
 }
 
-
-
 void ReadSocketClient (HWND hWnd)
 {
 	static SharedDataServer sharedDataPrev;
@@ -68,7 +66,7 @@ void ReadSocketClient (HWND hWnd)
 		uint32_t s1, s2, s3, s4;
 		currentControl.GetSpeed(s1, s2, s3, s4);
 		std::string log = "tt:" + std::to_string((int)currentControl.GetTimeStamp());
-		log += "speed:" + std::to_string((int)s1), ", " + std::to_string((int)s2), ", " + std::to_string((int)s3), ", " + std::to_string((int)s4), "\r\n";
+		log += " speed:" + std::to_string((int)s1) + ", " + std::to_string((int)s2) + ", " + std::to_string((int)s3) + ", " + std::to_string((int)s4) + "\r\n";
 		OutputDebugStringA(log.c_str());
 	}
 	std::string ipAddress (UDPSERVER_IP_ADDRESS);
@@ -209,10 +207,18 @@ void DrawCurves (HWND hWnd, HDC hDC, UINT32 indexIn, UINT32 num)
 //		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].quat[2], arrayGAM[index2].quat[2], COLOR_BLUE,   4 * h, h, -1., 1.);
 //		DrawLine (hWnd, hDC, x1, x1 + 1, arrayGAM[index1].quat[3], arrayGAM[index2].quat[3], COLOR_YELLOW, 4 * h, h, -1., 1.);
 	}
-	x1 = rect.right - 500;
+	x1 = rect.right - 800;
 	INT32 y1 = rect.bottom - 120;
 	INT32 dy = 20;
 	std::wstring text;
+
+	uint32_t s1, s2, s3, s4;
+	currentControl.GetSpeed(s1, s2, s3, s4);
+	text = L"tt:" + std::to_wstring((int)currentControl.GetTimeStamp());
+	text += L"speed 1:" + std::to_wstring((int)s1) + L", 2:" + std::to_wstring((int)s2) + L", 3:" + std::to_wstring((int)s3) + L", 4:" + std::to_wstring((int)s4);
+	TextOut (hDC, x1, y1, text.c_str (), text.size ());
+	y1 += dy;
+
 	text = L"Acc: " + std::to_wstring (arrayGAM[index1 + 1].acc[0]) + L", " + std::to_wstring (arrayGAM[index1 + 1].acc[1]) + L", " + std::to_wstring (arrayGAM[index1 + 1].acc[2]) + L"   ";
 	TextOut (hDC, x1, y1, text.c_str (), text.size ());
 	y1 += dy;
