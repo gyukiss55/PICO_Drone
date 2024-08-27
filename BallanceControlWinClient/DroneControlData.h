@@ -72,7 +72,8 @@ public:
 			s2 = speedMotor2;
 			s3 = speedMotor3;
 			s4 = speedMotor4;
-			return true;
+			return true;dadoli58
+				  
 		}
 		return false;
 	}
